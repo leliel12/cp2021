@@ -50,6 +50,21 @@ void init_b(float * m)
     }
 }
 
+//inicializa b pero de manera transpuesta bt[x,y]=b[y,x]
+void init_b_transposed(float * bt)
+{
+    for (int y = 0; y < N; ++y) {
+        for (int x = 0; x < N; ++x) {
+            // Triangulo superior U = 1, resto 0
+            if (x <= y) {
+                bt[y * N + x] = 1.0f;
+            } else {
+                bt[y * N + x] = 0.0f;
+            }
+        }
+    }
+}
+
 
 void init_c(float * m)
 {
@@ -95,6 +110,29 @@ void matmul_naive(const float * a, const float * b, float * c)
 
 }
 
+// realiza el producto pero trasponiendo la matriz bt
+// C = A*(B^T)^T + C
+// lo que equivale a:
+// C = A*B + C
+void matmul_transposed(const float * a, const float * bt, float * c)
+{
+    /* FALTA: calcular C = A*B + C */
+    float ab;
+
+    for (int y = 0; y < N; ++y) {
+        for (int x = 0; x < N; ++x) {
+                ab=0.0;
+                // m_{y,x} = y
+        	for (int k = 0; k < N; ++k) {
+			// la idea es evitar que puntero sobre el que
+			// itera k de saltos (evitar cache missing y TLB missing)
+			ab+=a[y * N + k]* bt[x * N + k];
+		}
+                c[y * N + x] = ab + c[y * N + x];
+        }
+    }
+
+}
 
 int main()
 {
@@ -121,10 +159,30 @@ int main()
     double operations = STEPS * (2.0 * N * N * N + N * N);
     double gflops = operations / (1000.0 * 1000.0 * 1000.0 * elapsed);
     if (check_result(c)) {
-        printf("%f GFLOPS\n", gflops);
+        printf("Naive run: %f GFLOPS\n", gflops);
     } else {
         printf("Resultado incorrecto!\n");
     }
+
+    /* inicializar valores */
+    init_a(a);
+    init_b_transposed(b);
+    init_c(c);
+
+    start = wtime();
+    for (int i = 0; i < STEPS; ++i) {
+        matmul_transposed(a, b, c);
+    }
+
+    end = wtime();
+    elapsed = end - start;
+    gflops = operations / (1000.0 * 1000.0 * 1000.0 * elapsed);
+    if (check_result(c)) {
+        printf("Transposed run: %f GFLOPS\n", gflops);
+    } else {
+        printf("Resultado incorrecto!\n");
+    }
+
 
     /* devolver algun resultado para que el compilador no descarte codigo */
     return (int) c[0];
