@@ -77,9 +77,22 @@ bool check_result(const float * m)
 }
 
 
-void matmul(const float * a, const float * b, float * c)
+void matmul_naive(const float * a, const float * b, float * c)
 {
     /* FALTA: calcular C = A*B + C */
+    float ab;
+
+    for (int y = 0; y < N; ++y) {
+        for (int x = 0; x < N; ++x) {
+                ab=0.0;
+                // m_{y,x} = y
+        	for (int k = 0; k < N; ++k) {
+			ab+=a[y * N + k]* b[k * N + x];
+		}
+                c[y * N + x] = ab + c[y * N + x];
+        }
+    }
+
 }
 
 
@@ -100,7 +113,7 @@ int main()
 
     double start = wtime();
     for (int i = 0; i < STEPS; ++i) {
-        matmul(a, b, c);
+        matmul_naive(a, b, c);
     }
 
     double end = wtime();
