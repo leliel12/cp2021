@@ -95,21 +95,31 @@ bool check_result(const float * m)
 void matmul_naive(const float * a, const float * b, float * c)
 {
     /* FALTA: calcular C = A*B + C */
-    float ab;
-
     for (int y = 0; y < N; ++y) {
         for (int x = 0; x < N; ++x) {
-                ab=0.0;
-                // m_{y,x} = y
         	for (int k = 0; k < N; ++k) {
-			ab+=a[y * N + k]* b[k * N + x];
+			c[y * N + x]+=a[y * N + k]* b[k * N + x];
 		}
-                c[y * N + x] = ab + c[y * N + x];
         }
     }
 
 }
 
+void matmul_naive_omp(const float * a, const float * b, float * c)
+{
+    /* FALTA: calcular C = A*B + C */
+#pragma omp parallel for default(none) \
+  	schedule(dynamic) \
+  	shared(c,a,b)
+    for (int y = 0; y < N; ++y) {
+        for (int x = 0; x < N; ++x) {
+        	for (int k = 0; k < N; ++k) {
+			c[y * N + x]+=a[y * N + k]* b[k * N + x];
+		}
+        }
+    }
+
+}
 // realiza el producto pero trasponiendo la matriz bt
 // C = A*(B^T)^T + C
 // lo que equivale a:
@@ -117,18 +127,46 @@ void matmul_naive(const float * a, const float * b, float * c)
 void matmul_transposed(const float * a, const float * bt, float * c)
 {
     /* FALTA: calcular C = A*B + C */
-    float ab;
-
     for (int y = 0; y < N; ++y) {
         for (int x = 0; x < N; ++x) {
-                ab=0.0;
-                // m_{y,x} = y
         	for (int k = 0; k < N; ++k) {
 			// la idea es evitar que puntero sobre el que
 			// itera k de saltos (evitar cache missing y TLB missing)
-			ab+=a[y * N + k]* bt[x * N + k];
+			c[y * N + x]+=a[y * N + k]* bt[x * N + k];
 		}
-                c[y * N + x] = ab + c[y * N + x];
+        }
+    }
+
+}
+
+void matmul_transposed_ptr(const float * a, const float * bt, float * c)
+{
+    /* FALTA: calcular C = A*B + C */
+    for (int y = 0; y < N; ++y) {
+        for (int x = 0; x < N; ++x) {
+        	for (int k = 0; k < N; ++k) {
+			// la idea es evitar que puntero sobre el que
+			// itera k de saltos (evitar cache missing y TLB missing)
+			*(c+ y*N+x)+=(*(a + y*N+ k))*(*(bt + x*N+ k));
+		}
+        }
+    }
+
+}
+
+
+void matmul_transposed_omp(const float * a, const float * bt, float * c)
+{
+    /* FALTA: calcular C = A*B + C */
+	  
+#pragma omp parallel for default(none) \
+  	schedule(dynamic) \
+  	shared(c,a,bt)
+    for (int y = 0; y < N; ++y) {
+        for (int x = 0; x < N; ++x) {
+        	for (int k = 0; k < N; ++k) {
+			c[y * N + x]+=a[y * N + k]* bt[x * N + k];
+		}
         }
     }
 
@@ -143,6 +181,7 @@ int main()
     float *a = malloc(matsize);
     float *b = malloc(matsize);
     float *c = malloc(matsize);
+
 
     /* inicializar valores */
     init_a(a);
@@ -163,6 +202,26 @@ int main()
     } else {
         printf("Resultado incorrecto!\n");
     }
+    /* inicializar valores */
+    init_a(a);
+    init_b(b);
+    init_c(c);
+
+    start = wtime();
+    for (int i = 0; i < STEPS; ++i) {
+        matmul_naive_omp(a, b, c);
+    }
+
+    end = wtime();
+    elapsed = end - start;
+    gflops = operations / (1000.0 * 1000.0 * 1000.0 * elapsed);
+    if (check_result(c)) {
+        printf("Naive omp run: %f GFLOPS\n", gflops);
+    } else {
+        printf("Resultado incorrecto!\n");
+    }
+
+
 
     /* inicializar valores */
     init_a(a);
@@ -179,6 +238,42 @@ int main()
     gflops = operations / (1000.0 * 1000.0 * 1000.0 * elapsed);
     if (check_result(c)) {
         printf("Transposed run: %f GFLOPS\n", gflops);
+    } else {
+        printf("Resultado incorrecto!\n");
+    }
+
+    /*init_a(a);
+    init_b_transposed(b);
+    init_c(c);
+
+    start = wtime();
+    for (int i = 0; i < STEPS; ++i) {
+        matmul_transposed_ptr(a, b, c);
+    }
+
+    end = wtime();
+    elapsed = end - start;
+    gflops = operations / (1000.0 * 1000.0 * 1000.0 * elapsed);
+    if (check_result(c)) {
+        printf("Transposed Ptr run: %f GFLOPS\n", gflops);
+    } else {
+        printf("Resultado incorrecto!\n");
+    }*/
+
+    init_a(a);
+    init_b_transposed(b);
+    init_c(c);
+
+    start = wtime();
+    for (int i = 0; i < STEPS; ++i) {
+        matmul_transposed_omp(a, b, c);
+    }
+
+    end = wtime();
+    elapsed = end - start;
+    gflops = operations / (1000.0 * 1000.0 * 1000.0 * elapsed);
+    if (check_result(c)) {
+        printf("Transposed OMP run: %f GFLOPS\n", gflops);
     } else {
         printf("Resultado incorrecto!\n");
     }

@@ -1,5 +1,5 @@
 # Compilador
-CC=gcc -O3
+CC=gcc -O0 -fopenmp 
 
 # Parametros para el compilador
 CFLAGS=-Wall -Wextra
