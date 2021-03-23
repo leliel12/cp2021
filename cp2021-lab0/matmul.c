@@ -158,7 +158,7 @@ void matmul_transposed_ptr(const float * a, const float * bt, float * c)
 void matmul_transposed_omp(const float * a, const float * bt, float * c)
 {
     /* FALTA: calcular C = A*B + C */
-	  
+
 #pragma omp parallel for default(none) \
   	schedule(dynamic) \
   	shared(c,a,bt)
@@ -222,7 +222,6 @@ int main()
     }
 
 
-
     /* inicializar valores */
     init_a(a);
     init_b_transposed(b);
@@ -241,24 +240,6 @@ int main()
     } else {
         printf("Resultado incorrecto!\n");
     }
-
-    /*init_a(a);
-    init_b_transposed(b);
-    init_c(c);
-
-    start = wtime();
-    for (int i = 0; i < STEPS; ++i) {
-        matmul_transposed_ptr(a, b, c);
-    }
-
-    end = wtime();
-    elapsed = end - start;
-    gflops = operations / (1000.0 * 1000.0 * 1000.0 * elapsed);
-    if (check_result(c)) {
-        printf("Transposed Ptr run: %f GFLOPS\n", gflops);
-    } else {
-        printf("Resultado incorrecto!\n");
-    }*/
 
     init_a(a);
     init_b_transposed(b);

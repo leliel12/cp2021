@@ -1,0 +1,33 @@
+Implementation,GFLOPS,CC,O
+Naive,0.494373,gcc,0
+Naive omp,1.798112,gcc,0
+Transposed,0.5313,gcc,0
+Transposed OMP,1.843175,gcc,0
+Naive,0.749583,gcc,1
+Naive omp,5.057579,gcc,1
+Transposed,0.766912,gcc,1
+Transposed OMP,5.171017,gcc,1
+Naive,2.029233,gcc,2
+Naive omp,9.017353,gcc,2
+Transposed,2.253981,gcc,2
+Transposed OMP,14.326646,gcc,2
+Naive,7.523513,gcc,3
+Naive omp,8.636954,gcc,3
+Transposed,2.453798,gcc,3
+Transposed OMP,14.444958,gcc,3
+Naive,0.621228,clang,0
+Naive omp,1.106308,clang,0
+Transposed,0.703124,clang,0
+Transposed OMP,2.413525,clang,0
+Naive,0.782305,clang,1
+Naive omp,5.253814,clang,1
+Transposed,0.787172,clang,1
+Transposed OMP,5.408944,clang,1
+Naive,2.345898,clang,2
+Naive omp,9.457313,clang,2
+Transposed,2.338726,clang,2
+Transposed OMP,14.145405,clang,2
+Naive,2.285744,clang,3
+Naive omp,9.351861,clang,3
+Transposed,2.33842,clang,3
+Transposed OMP,14.333052,clang,3
