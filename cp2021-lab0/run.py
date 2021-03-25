@@ -30,12 +30,12 @@ class Grid:
 # CONF
 # =============================================================================
 
-COMPILE_TPL = "{CC} -O{O} -fopenmp  -Wall -Wextra -o _out/matmul_{CC}_{O} matmul.c"
+COMPILE_TPL = "{CC} -O{O} -fopenmp {flags} -Wall -Wextra -o '_out/matmul_{CC}_{O}_{flags}' matmul.c"
 
-RUN_TPL = "_out/matmul_{CC}_{O}"
+RUN_TPL = "_out/matmul_{CC}_{O}_{flags}"
 
 
-PARAM_GRID = {"CC": ["gcc", "clang"], "O": [0, 1, 2, 3]}
+PARAM_GRID = {"CC": ["gcc", "clang"], "O": [0, 1, 2, 3], "flags": ["", "-march=native"]}
 
 
 # =============================================================================

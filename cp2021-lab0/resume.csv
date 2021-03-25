@@ -1,33 +1,65 @@
-Implementation,GFLOPS,CC,O
-Naive,0.494373,gcc,0
-Naive omp,1.798112,gcc,0
-Transposed,0.5313,gcc,0
-Transposed OMP,1.843175,gcc,0
-Naive,0.749583,gcc,1
-Naive omp,5.057579,gcc,1
-Transposed,0.766912,gcc,1
-Transposed OMP,5.171017,gcc,1
-Naive,2.029233,gcc,2
-Naive omp,9.017353,gcc,2
-Transposed,2.253981,gcc,2
-Transposed OMP,14.326646,gcc,2
-Naive,7.523513,gcc,3
-Naive omp,8.636954,gcc,3
-Transposed,2.453798,gcc,3
-Transposed OMP,14.444958,gcc,3
-Naive,0.621228,clang,0
-Naive omp,1.106308,clang,0
-Transposed,0.703124,clang,0
-Transposed OMP,2.413525,clang,0
-Naive,0.782305,clang,1
-Naive omp,5.253814,clang,1
-Transposed,0.787172,clang,1
-Transposed OMP,5.408944,clang,1
-Naive,2.345898,clang,2
-Naive omp,9.457313,clang,2
-Transposed,2.338726,clang,2
-Transposed OMP,14.145405,clang,2
-Naive,2.285744,clang,3
-Naive omp,9.351861,clang,3
-Transposed,2.33842,clang,3
-Transposed OMP,14.333052,clang,3
+Implementation,GFLOPS,CC,O,flags
+Naive,0.39393,gcc,0,
+Naive omp,1.527445,gcc,0,
+Transposed,0.512093,gcc,0,
+Transposed OMP,1.779884,gcc,0,
+Naive,0.400047,gcc,0,-march=native
+Naive omp,1.505238,gcc,0,-march=native
+Transposed,0.405867,gcc,0,-march=native
+Transposed OMP,1.729471,gcc,0,-march=native
+Naive,0.697524,gcc,1,
+Naive omp,4.43563,gcc,1,
+Transposed,0.72823,gcc,1,
+Transposed OMP,4.669951,gcc,1,
+Naive,0.701826,gcc,1,-march=native
+Naive omp,4.524201,gcc,1,-march=native
+Transposed,0.715524,gcc,1,-march=native
+Transposed OMP,4.258931,gcc,1,-march=native
+Naive,1.92259,gcc,2,
+Naive omp,7.348425,gcc,2,
+Transposed,2.103689,gcc,2,
+Transposed OMP,12.815216,gcc,2,
+Naive,1.288839,gcc,2,-march=native
+Naive omp,8.104938,gcc,2,-march=native
+Transposed,1.322636,gcc,2,-march=native
+Transposed OMP,9.322936,gcc,2,-march=native
+Naive,6.991511,gcc,3,
+Naive omp,6.420173,gcc,3,
+Transposed,2.235762,gcc,3,
+Transposed OMP,13.052838,gcc,3,
+Naive,8.502957,gcc,3,-march=native
+Naive omp,7.950628,gcc,3,-march=native
+Transposed,2.161574,gcc,3,-march=native
+Transposed OMP,9.445631,gcc,3,-march=native
+Naive,0.54398,clang,0,
+Naive omp,0.928156,clang,0,
+Transposed,0.623032,clang,0,
+Transposed OMP,1.053094,clang,0,
+Naive,0.545022,clang,0,-march=native
+Naive omp,1.413485,clang,0,-march=native
+Transposed,0.528362,clang,0,-march=native
+Transposed OMP,1.807939,clang,0,-march=native
+Naive,0.617585,clang,1,
+Naive omp,4.517964,clang,1,
+Transposed,0.722773,clang,1,
+Transposed OMP,4.967748,clang,1,
+Naive,0.698063,clang,1,-march=native
+Naive omp,4.630177,clang,1,-march=native
+Transposed,0.713175,clang,1,-march=native
+Transposed OMP,4.553283,clang,1,-march=native
+Naive,2.102752,clang,2,
+Naive omp,7.574449,clang,2,
+Transposed,2.138835,clang,2,
+Transposed OMP,13.204536,clang,2,
+Naive,2.114394,clang,2,-march=native
+Naive omp,8.218572,clang,2,-march=native
+Transposed,2.124285,clang,2,-march=native
+Transposed OMP,14.066037,clang,2,-march=native
+Naive,2.114144,clang,3,
+Naive omp,7.65514,clang,3,
+Transposed,2.122379,clang,3,
+Transposed OMP,13.354371,clang,3,
+Naive,2.11949,clang,3,-march=native
+Naive omp,7.817053,clang,3,-march=native
+Transposed,2.135567,clang,3,-march=native
+Transposed OMP,13.645973,clang,3,-march=native
