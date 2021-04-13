@@ -2,7 +2,7 @@ CC=clang -g
 CFLAGS= -O3 -march=native
 LDFLAGS=
 
-TARGETS=demo headless
+TARGETS=demo headless 
 SOURCES=$(shell echo *.c)
 COMMON_OBJECTS=solver.o
 
