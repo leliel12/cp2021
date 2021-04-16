@@ -1,0 +1,26 @@
+# started on Fri Apr 16 10:36:33 2021
+
+
+ Performance counter stats for './headless_peano 1024' (5 runs):
+
+        257,714.16 msec task-clock                #    0.999 CPUs utilized            ( +-  1.13% )
+            26,318      context-switches          #    0.102 K/sec                    ( +-  1.12% )
+                 0      cpu-migrations            #    0.000 K/sec                    ( +-100.00% )
+            36,230      page-faults               #    0.141 K/sec                    ( +-  3.59% )
+   744,147,406,248      cycles                    #    2.887 GHz                      ( +-  1.00% )  (30.77%)
+   264,811,087,560      instructions              #    0.36  insn per cycle           ( +-  0.07% )  (38.46%)
+    23,009,836,955      branches                  #   89.284 M/sec                    ( +-  0.09% )  (38.46%)
+       696,596,888      branch-misses             #    3.03% of all branches          ( +-  0.11% )  (38.46%)
+   104,609,207,082      L1-dcache-loads           #  405.912 M/sec                    ( +-  0.02% )  (38.46%)
+    30,932,507,337      L1-dcache-load-misses     #   29.57% of all L1-dcache hits    ( +-  0.01% )  (38.46%)
+    16,388,542,333      LLC-loads                 #   63.592 M/sec                    ( +-  0.46% )  (30.77%)
+    11,517,234,428      LLC-load-misses           #   70.28% of all LL-cache hits     ( +-  0.64% )  (30.77%)
+   <not supported>      L1-icache-loads                                             
+        26,411,581      L1-icache-load-misses                                         ( +-  4.77% )  (30.77%)
+   104,565,902,154      dTLB-loads                #  405.744 M/sec                    ( +-  0.03% )  (30.77%)
+         1,592,886      dTLB-load-misses          #    0.00% of all dTLB cache hits   ( +- 11.85% )  (30.77%)
+            37,797      iTLB-loads                #    0.147 K/sec                    ( +-  6.46% )  (30.77%)
+            76,416      iTLB-load-misses          #  202.17% of all iTLB cache hits   ( +- 13.29% )  (30.77%)
+
+            257.93 +- 2.93 seconds time elapsed  ( +-  1.14% )
+

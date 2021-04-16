@@ -1,0 +1,26 @@
+# started on Fri Apr 16 10:19:46 2021
+
+
+ Performance counter stats for './headless 128' (20 runs):
+
+          1,945.15 msec task-clock                #    0.992 CPUs utilized            ( +-  0.22% )
+               538      context-switches          #    0.276 K/sec                    ( +-  0.12% )
+                 0      cpu-migrations            #    0.000 K/sec                    ( +- 45.88% )
+               259      page-faults               #    0.133 K/sec                    ( +-  2.13% )
+     4,614,751,132      cycles                    #    2.372 GHz                      ( +-  0.03% )  (30.78%)
+     3,344,970,452      instructions              #    0.72  insn per cycle           ( +-  0.04% )  (38.51%)
+       203,262,496      branches                  #  104.497 M/sec                    ( +-  0.12% )  (38.53%)
+         1,443,648      branch-misses             #    0.71% of all branches          ( +-  0.11% )  (38.57%)
+     1,097,163,538      L1-dcache-loads           #  564.051 M/sec                    ( +-  0.02% )  (38.59%)
+        33,997,585      L1-dcache-load-misses     #    3.10% of all L1-dcache hits    ( +-  0.16% )  (38.57%)
+           993,319      LLC-loads                 #    0.511 M/sec                    ( +-  1.86% )  (30.83%)
+             7,394      LLC-load-misses           #    0.74% of all LL-cache hits     ( +-  0.63% )  (30.82%)
+   <not supported>      L1-icache-loads                                             
+           287,040      L1-icache-load-misses                                         ( +-  5.66% )  (30.78%)
+     1,097,968,722      dTLB-loads                #  564.465 M/sec                    ( +-  0.05% )  (30.76%)
+             3,006      dTLB-load-misses          #    0.00% of all dTLB cache hits   ( +- 14.55% )  (30.74%)
+             1,645      iTLB-loads                #    0.846 K/sec                    ( +- 54.38% )  (30.74%)
+               576      iTLB-load-misses          #   35.05% of all iTLB cache hits   ( +- 18.71% )  (30.75%)
+
+           1.96138 +- 0.00433 seconds time elapsed  ( +-  0.22% )
+
