@@ -6,12 +6,12 @@
 #define SOLVER_H_INCLUDED
 struct float_link
 {
-	float val;
 	int x,y;
-	struct float_link *U;
-	struct float_link *D;
-	struct float_link *L;
-	struct float_link *R;
+	float  val[2];
+	struct float_link *restrict U;
+	struct float_link *restrict D;
+	struct float_link *restrict L;
+	struct float_link *restrict R;
 };
 
 void dens_step(unsigned int n, struct float_link *x, struct float_link *x0, struct float_link *u, struct float_link *v, float diff, float dt);

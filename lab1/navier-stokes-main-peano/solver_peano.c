@@ -28,103 +28,6 @@ void rot(int n, int *x, int *y, int rx, int ry)
     }
 }
 
-int xy2key(int n, int x, int y)
-{
-	int sizein = n*n;
-	if(x>=0 && x<n) 
-	{
-		if(y>=0 && y< n)
-		{
-			return(peano_2dtokey(n,x,y));
-		} 
-		else if (y==(-1))
-		{
-	                //borde inferior
-			return(sizein + n+ x);
-		} 
-		else if (y==n)
-		{
-			//borde superior
-			return(sizein + x);
-		}
-		else
-		{
-			fprintf(stderr,"Wrong index 1\n");
-			exit(-1);
-		}
-
-	}
-	else 
-	{
-		if(y>=0 && y < n)
-		{
-		    if (x==(-1))
-		    {
-			  //borde izquierdo
-	                  return(sizein + 3*n+ y);
-		    }
-		    else if (x==n) 
-		    {
-			  //borde derecho
-			  return(sizein + 2*n+ y);
-		    }
-		    else 
-		    {
-			fprintf(stderr,"Wrong index 2\n");
-			exit(-1);
-		    }
-
-		} 
-		else if (y==(-1))
-		{
-     		    if (x==(-1))
-		    {
-			    //esquina abajo izquierda
-			    return(sizein + 4*n);
-		    } 
-		    else if (x==n) 
-		    {
-			    //esquina abajo derecha
-			    return(sizein + 4*n +1);
-		    } 
-		    else 
-		    {
-			fprintf(stderr,"Wrong index 3\n");
-			exit(-1);
-		    }
-
-
-		} 
-		else if (y==n)
-		{
-		    if (x==(-1))
-		    {
-			    //esquina arriba izquierda
-			    return(sizein + 4*n + 2);
-		    } 
-		    else if (x==n) 
-		    {
-			    //esquina arriba derecha
-			    return(sizein + 4*n + 3);
-		    } 
-		    else 
-		    {
-			fprintf(stderr,"Wrong index 4\n");
-			exit(-1);
-		    }
-
-		}
-		else
-		{
-			fprintf(stderr,"Wrong index 5 %d %d\n",x,y);
-			exit(-1);
-		}
-	}
-	fprintf(stderr,"Wrong xy2key\n");
-	exit(-1);
-	return(0);
-}
-
 int peano_2dtokey(int n, int x, int y) 
 {
     int rx, ry, s, d=0;
@@ -158,17 +61,16 @@ void init_pointers(struct float_link *ptr,int N)
     int i,j;
     int kU,kD,kL,kR;
     int size   = (N + 2) * (N + 2);
-    int sizein = N*N;
 
-    for (i = 0; i <N; i++) 
+    for (i = 1; i <=N; i++) 
     {
-       for (j = 0; j <N; j++) 
+       for (j = 1; j <=N; j++) 
        {
-	       k  = xy2key(N,i,j);
-	       kU = xy2key(N,i   ,j+1);
-	       kD = xy2key(N,i   ,j-1);
-	       kR = xy2key(N,i+1 ,j);
-	       kL = xy2key(N,i-1 ,j);
+	       k  = peano_2dtokey(N+2,i,j);
+	       kU = peano_2dtokey(N+2,i   ,j+1);
+	       kD = peano_2dtokey(N+2,i   ,j-1);
+	       kR = peano_2dtokey(N+2,i+1 ,j);
+	       kL = peano_2dtokey(N+2,i-1 ,j);
                //fprintf(fp, "%d %d %d %d %d %d %d\n",i,j,k,kU,kD,kL,kR);
 	       ptr[k].x = i;
 	       ptr[k].y = j;
@@ -180,17 +82,16 @@ void init_pointers(struct float_link *ptr,int N)
     }
 
     //boundaries
-    i=0;
-    for (int t = 0; t <N; t++) 
+    for (int t = 1; t <=N; t++) 
     {
 	       int i,j;
 	       // borde superior 
-	       j=N; i=t;
-	       k  = xy2key(N,i,j);
-	       kD = xy2key(N,i,j-1);
+	       j=N+1; i=t;
+	       k  = peano_2dtokey(N+2,i,j);
+	       kD = peano_2dtokey(N+2,i,j-1);
 	       kU = kD;//ya estamos arriba apuntar para abajo
-	       kR = xy2key(N,i+1,j);
-	       kL = xy2key(N,i-1,j);
+	       kR = peano_2dtokey(N+2,i+1,j);
+	       kL = peano_2dtokey(N+2,i-1,j);
                //fprintf(fp, "%d %d %d %d %d %d %d\n",i,j,k,kU,kD,kL,kR);
 	       ptr[k].x = i;
 	       ptr[k].y = j;
@@ -199,13 +100,13 @@ void init_pointers(struct float_link *ptr,int N)
 	       ptr[k].L = &ptr[kL];
 	       ptr[k].R = &ptr[kR];
 
-	       // borde inferior j=-1
-	       j=-1; i=t;
-	       k  = xy2key(N,i,j);
-	       kU = xy2key(N,i,j+1);
+	       // borde inferior j=0
+	       j=0; i=t;
+	       k  = peano_2dtokey(N+2,i,j);
+	       kU = peano_2dtokey(N+2,i,j+1);
 	       kD = kU;//ya estamos abajo apuntar para arriba
-	       kR = xy2key(N,i+1,j);
-	       kL = xy2key(N,i-1,j);
+	       kR = peano_2dtokey(N+2,i+1,j);
+	       kL = peano_2dtokey(N+2,i-1,j);
                //fprintf(fp, "%d %d %d %d %d %d %d\n",i,j,k,kU,kD,kL,kR);
 	       ptr[k].x = i;
 	       ptr[k].y = j;
@@ -214,12 +115,12 @@ void init_pointers(struct float_link *ptr,int N)
 	       ptr[k].L = &ptr[kL];
 	       ptr[k].R = &ptr[kR];
 
-   	       // borde derecho i=N
-	       i=N; j=t;
-	       k  = xy2key(N,i,j);
-	       kU = xy2key(N,i,j+1);
-	       kD = xy2key(N,i,j-1);
-	       kL = xy2key(N,i-1,j);
+   	       // borde derecho i=N+1
+	       i=N+1; j=t;
+	       k  = peano_2dtokey(N+2,i,j);
+	       kU = peano_2dtokey(N+2,i,j+1);
+	       kD = peano_2dtokey(N+2,i,j-1);
+	       kL = peano_2dtokey(N+2,i-1,j);
 	       kR = kL;//ya estamos a la derecha apuntar a la izquierda
                //fprintf(fp, "%d %d %d %d %d %d %d\n",i,j,k,kU,kD,kL,kR);
 	       ptr[k].x = i;
@@ -230,12 +131,12 @@ void init_pointers(struct float_link *ptr,int N)
 	       ptr[k].R = &ptr[kR];
 
 
-   	       // borde izquierdo i=-1
-	       i=-1; j =t;
-	       k  = xy2key(N,i,j);
-	       kU = xy2key(N,i,j+1);
-	       kD = xy2key(N,i,j-1);
-	       kR = xy2key(N,i+1,j);
+   	       // borde izquierdo i=0
+	       i=0; j =t;
+	       k  = peano_2dtokey(N+2,i,j);
+	       kU = peano_2dtokey(N+2,i,j+1);
+	       kD = peano_2dtokey(N+2,i,j-1);
+	       kR = peano_2dtokey(N+2,i+1,j);
 	       kL = kR;//ya estamos a la izquierda apuntar a la derecha
                //fprintf(fp, "%d %d %d %d %d %d %d\n",i,j,k,kU,kD,kL,kR);
 	       ptr[k].x = i;
@@ -249,11 +150,11 @@ void init_pointers(struct float_link *ptr,int N)
     // esquinas
 
     // esquina abajo izquierda
-    i=-1;j=-1;
-    k  = xy2key(N,i,j);
-    kU = xy2key(N,i,j+1);
+    i=0;j=0;
+    k  = peano_2dtokey(N+2,i,j);
+    kU = peano_2dtokey(N+2,i,j+1);
     kD = kU;
-    kR = xy2key(N,i+1,j);
+    kR = peano_2dtokey(N+2,i+1,j);
     kL = kR;
     //fprintf(fp, "%d %d %d %d %d %d %d\n",i,j,k,kU,kD,kL,kR);
     ptr[k].x = i;
@@ -264,11 +165,11 @@ void init_pointers(struct float_link *ptr,int N)
     ptr[k].R = &ptr[kR];
    
     // esquina abajo derecha
-    i=N;j=-1;
-    k  = xy2key(N,i,j);
-    kU = xy2key(N,i,j+1);
+    i=N+1;j=0;
+    k  = peano_2dtokey(N+2,i,j);
+    kU = peano_2dtokey(N+2,i,j+1);
     kD = kU;
-    kL = xy2key(N,i-1,j);
+    kL = peano_2dtokey(N+2,i-1,j);
     kR = kL;
     //fprintf(fp, "%d %d %d %d %d %d %d\n",i,j,k,kU,kD,kL,kR);
     ptr[k].x = i;
@@ -280,11 +181,11 @@ void init_pointers(struct float_link *ptr,int N)
    
        
     // esquina arriba izquierda
-    i=-1;j=N;
-    k  = xy2key(N,i,j);
-    kD = xy2key(N,i,j-1);
+    i=0;j=N+1;
+    k  = peano_2dtokey(N+2,i,j);
+    kD = peano_2dtokey(N+2,i,j-1);
     kU = kD;
-    kR = xy2key(N,i+1,j);
+    kR = peano_2dtokey(N+2,i+1,j);
     kL = kR;
     //fprintf(fp, "%d %d %d %d %d %d %d\n",i,j,k,kU,kD,kL,kR);
     ptr[k].x = i;
@@ -295,12 +196,12 @@ void init_pointers(struct float_link *ptr,int N)
     ptr[k].R = &ptr[kR];
        
     // esquina arriba derecha
-    i=N; j=N;
+    i=N+1; j=N+1;
 	       
-    k  = xy2key(N,i,j);
-    kD = xy2key(N,i,j-1);
+    k  = peano_2dtokey(N+2,i,j);
+    kD = peano_2dtokey(N+2,i,j-1);
     kU = kD;
-    kL = xy2key(N, i-1, j   );
+    kL = peano_2dtokey(N+2, i-1, j   );
     kR = kL;
     //fprintf(fp, "%d %d %d %d %d %d %d\n",i,j,k,kU,kD,kL,kR);
     ptr[k].x = i;
@@ -323,14 +224,14 @@ static void add_source(unsigned int n,struct float_link *x, const struct float_l
 {
     unsigned int size = (n + 2) * (n + 2);
     for (unsigned int i = 0; i < size; i++) {
-        x[i].val += dt * s[i].val;
+        x[i].val[0] += dt * s[i].val[0];
     }
 }
 
-static void set_bnd(unsigned int n, boundary b, struct float_link *x)
+static void lin_solve(unsigned int n, boundary b, struct float_link *x, const struct float_link* x0, float a, float c)
 {
-    int size   = (n + 2) * (n + 2);
-    int sizein = n*n;
+    int size = (n + 2) * (n + 2);
+    struct float_link * xk;
     int f1,f2;
 
     if(b ==VERTICAL)
@@ -348,39 +249,61 @@ static void set_bnd(unsigned int n, boundary b, struct float_link *x)
 	    f1 = 1;
 	    f2 = 1;
     }
-    // borde superior e inferior (HORIZONTAL)
-    for (int t = sizein; t < 2*n+sizein; t++) 
-	    x[t].val = f1*((x[t].U)-> val);
-	    
-    // borde derecho e izquierdo (VERTICAL)
-    for (int t = 2*n+sizein; t <4*n+sizein; t++) 
-	    x[t].val = f2*(((x[t].R)-> val));
 
-    // esquinas
-    for(int t=size-4; t<size; t++)
-	    x[t].val = 0.5f*(((x[t].D)-> val)+((x[t].R)-> val));
-	
-}
-
-static void lin_solve(unsigned int n, boundary b, struct float_link *x, const struct float_link* x0, float a, float c)
-{
-    int size = (n + 2) * (n + 2);
-    int sizein = n*n;
-    struct float_link * xk;
-
-    //que siempre sea par para que el swap xk no quede invertido
-    for (int k = 0; k < 20; k++) 
+    for (int k = 0; k < 21; k++) 
     {
-        for (int i = 0; i < sizein; i=i+2) 
+	int prev= 0 ;//k%2;
+	int step= 0 ;//!prev;
+	//indices pares
+        for (int s = 0; s < size; s=s+2) 
 	{
-	      x[i].val = (x0[i].val + a * ((x[i].L)->val + (x[i].R)->val + (x[i].D)->val + (x[i].U)->val)) / c;
+		int i =x[s].x;
+		int j =x[s].y;
+		if(i>0 && i<=n)
+		{
+		   if(j>0 && j<=n)
+		   {
+	                x[s].val[step] = (x0[s].val[0] + a * ((x[s].L)->val[prev] + (x[s].R)->val[prev] + (x[s].D)->val[prev] + (x[s].U)->val[prev])) / c;
+		   }
+		} 
         }
 
-        for (int i = 1; i < sizein; i=i+2) 
+        for (int s = 1; s < size; s=s+2) 
 	{
-	      x[i].val = (x0[i].val + a * ((x[i].L)->val + (x[i].R)->val + (x[i].D)->val + (x[i].U)->val)) / c;
+		int i =x[s].x;
+		int j =x[s].y;
+		if(i>0 && i<=n)
+		{
+		   if(j>0 && j<=n)
+		   {
+	                x[s].val[step] = (x0[s].val[0] + a * ((x[s].L)->val[prev] + (x[s].R)->val[prev] + (x[s].D)->val[prev] + (x[s].U)->val[prev])) / c;
+		   }
+		} 
         }
-        set_bnd(n, b, x);
+	//set bounds
+        for (int s = 0; s < size; s++) 
+	{
+		int i =x[s].x;
+		int j =x[s].y;
+		if(i>0 && i<=n)
+		{
+		   if(!(j>0 && j<=n))
+		   {
+			x[s].val[step] = f1*((x[s].U)-> val[step]);
+		   }
+		} 
+		else
+		{
+		   if(j>0 && j<=n)//bordes verticales
+		   {
+	                x[s].val[step] = f2*(((x[s].R)-> val[step]));
+		   } 
+		   else  //esquinas
+		   { 
+			x[s].val[step] = 0.5f*(((x[s].D)-> val[step])+((x[s].R)-> val[step]));
+		   }
+		}
+        }
     }
 }
 
@@ -395,65 +318,193 @@ static void advect(unsigned int n, boundary b, struct float_link *d, struct floa
     int i0, j0;
     int i1, j1;
     unsigned int size = (n + 2) * (n + 2);
-    unsigned int sizein =  n*n;
     int sx;
     int sy;
     struct float_link *dd0;
     float x, y, s0, t0, s1, t1;
 
-    float dt0 = dt * n;
-    for (unsigned int i = 0; i < sizein; i++) 
-    {
-	    x = (d0[i].x+1) - dt0 * u[i].val;
-            y = (d0[i].y+1) - dt0 * v[i].val;
-            if (x < 0.5f) {
-                x = 0.5f;
-            } else if (x > n + 0.5f) {
-                x = n + 0.5f;
-            }
-            if (y < 0.5f) {
-                y = 0.5f;
-            } else if (y > n + 0.5f) {
-                y = n + 0.5f;
-            }
-            i0 = (int)x;
-            i1 = i0 + 1;
-	    j0 = (int)y;
-            j1 = j0 + 1;
-            s1 = x - i0;
-            s0 = 1 - s1;
-            t1 = y - j0;
-            t0 = 1 - t1;
-	    dd0=&d0[xy2key(n,i0-1,j0-1)];
+    int f1,f2;
 
-	    d[i].val = s0 * (t0 * dd0->val     + t1 * (dd0->U)->val) 
-		     + s1 * (t0 *(dd0->R)->val + t1 * ((dd0->R)->U)->val);
+    if(b ==VERTICAL)
+    {
+	    f1 = 1;
+	    f2 =-1;
+    } 
+    else if (b==HORIZONTAL)
+    {
+	    f1 = -1;
+	    f2 =  1;
+    }
+    else
+    {
+	    f1 = 1;
+	    f2 = 1;
     }
 
-    set_bnd(n, b, d);
+
+    float dt0 = dt * n;
+    for (unsigned int s = 0; s < size; s++) 
+    {
+	    int i = u[s].x;
+	    int j = u[s].y;
+
+	    if(i>0 && i<=n)
+	    {
+	       if(j>0 && j<=n)
+	       {
+	            x = i - dt0 * u[s].val[0];
+                    y = j - dt0 * v[s].val[0];
+                    if (x < 0.5f) {
+                        x = 0.5f;
+                    } else if (x > n + 0.5f) {
+                        x = n + 0.5f;
+                    }
+                    if (y < 0.5f) {
+                        y = 0.5f;
+                    } else if (y > n + 0.5f) {
+                        y = n + 0.5f;
+                    }
+                    i0 = (int)x;
+                    i1 = i0 + 1;
+	            j0 = (int)y;
+                    j1 = j0 + 1;
+                    s1 = x - i0;
+                    s0 = 1 - s1;
+                    t1 = y - j0;
+                    t0 = 1 - t1;
+	            dd0=&d0[peano_2dtokey(n+2,i0,j0)];
+
+	            d[s].val[0] = s0 * (t0 * dd0->val[0]     + t1 * (dd0->U)->val[0]) 
+	                     + s1 * (t0 *(dd0->R)->val[0] + t1 * ((dd0->R)->U)->val[0]);
+
+	       }
+	    } 
+    }
+
+    //set boundary
+    for (unsigned int s = 0; s < size; s++) 
+    {
+	    int i = u[s].x;
+	    int j = u[s].y;
+
+	    if(i>0 && i<=n)
+	    {
+	       if(!(j>0 && j<=n)) //bordes horizontales
+	       {
+	    	d[s].val[0] = f1*((d[s].U)-> val[0]);
+	       }
+	    } 
+	    else
+	    {
+	       if(j>0 && j<=n)//bordes verticales
+	       {
+	            d[s].val[0] = f2*(((d[s].R)-> val[0]));
+	       } 
+	       else  //esquinas
+	       { 
+	    	d[s].val[0] = 0.5f*(((d[s].D)-> val[0])+((d[s].R)-> val[0]));
+	       }
+	    }
+
+    }
+
 }
 
 static void project(unsigned int n,struct float_link * u, struct float_link *v, struct float_link *p, struct float_link * div)
 {
-    unsigned int sizein =  n*n;
-    for (unsigned int i = 0; i < sizein; i++) 
+    int size = (n+2)*(n+2);
+
+    for (unsigned int s = 0; s < size; s++) 
     {
-	    div[i].val = -0.5f * ((u[i].R)->val - (u[i].L)->val + (v[i].U)->val - (v[i].D)->val) / n;
-            p[i].val = 0.0f;
+	    int i = div[s].x;
+	    int j = div[s].y;
+
+	    if(i>0 && i<=n)
+	    {
+	       if(j>0 && j<=n)
+	       {
+	           div[s].val[0] = -0.5f * ((u[s].R)->val[0] - (u[s].L)->val[0] + (v[s].U)->val[0] - (v[s].D)->val[0]) / n;
+                   p[s].val[0] = 0.0f;
+
+	       }
+	    } 
     }
-    set_bnd(n, NONE, div);
-    set_bnd(n, NONE, p);
+
+    //set boundaries
+    for (unsigned int s = 0; s < size; s++) 
+    {
+	    int i = div[s].x;
+	    int j = div[s].y;
+
+	    if(i>0 && i<=n)
+	    {
+	       if(!(j>0 && j<=n)) //bordes horizontales
+	       {
+	    	div[s].val[0] = (div[s].U)-> val[0];
+	    	p[s].val[0] = (p[s].U)-> val[0];
+	       }
+	    } 
+	    else
+	    {
+	       if(j>0 && j<=n)//bordes verticales
+	       {
+	            div[s].val[0] = (div[s].R)-> val[0];
+	            p[s].val[0] = (p[s].R)-> val[0];
+	       } 
+	       else  //esquinas
+	       { 
+	    	    div[s].val[0] = 0.5f*(((div[s].D)-> val[0])+((div[s].R)-> val[0]));
+	    	    p[s].val[0]   = 0.5f*(((p[s].D)-> val[0])+((p[s].R)-> val[0]));
+	       }
+	    }
+
+    }
 
     lin_solve(n, NONE, p, div, 1, 4);
 
-    for (unsigned int i = 0; i < sizein; i++) 
+    for (unsigned int s = 0; s < size; s++) 
     {
-	    u[i].val -= 0.5f * n * ((p[i].R)->val - (p[i].L)->val);
-	    v[i].val -= 0.5f * n * ((p[i].U)->val - (p[i].D)->val);
-    }
-    set_bnd(n, VERTICAL, u);
-    set_bnd(n, HORIZONTAL, v);
+	    int i = u[s].x;
+	    int j = u[s].y;
 
+	    if(i>0 && i<=n)
+	    {
+	       if(j>0 && j<=n)
+	       {
+	           u[s].val[0] -= 0.5f * n * ((p[s].R)->val[0] - (p[s].L)->val[0]);
+	           v[s].val[0] -= 0.5f * n * ((p[s].U)->val[0] - (p[s].D)->val[0]);
+	       }
+	    } 
+    }
+
+    //set boundaries
+    for (unsigned int s = 0; s < size; s++) 
+    {
+	    int i = u[s].x;
+	    int j = u[s].y;
+
+	    if(i>0 && i<=n)
+	    {
+	       if(!(j>0 && j<=n))
+	       {
+	    	  u[s].val[0] = (u[s].U)-> val[0];
+	    	  v[s].val[0] = (-((v[s].U)-> val[0]));
+	       }
+	    } 
+	    else
+	    {
+	       if(j>0 && j<=n)//bordes verticales
+	       {
+	            u[s].val[0] = (-( (u[s].R)-> val[0]));
+	            v[s].val[0] = (v[s].R)-> val[0];
+	       } 
+	       else  //esquinas
+	       { 
+	    	    u[s].val[0] = 0.5f*(((u[s].D)-> val[0])+((u[s].R)-> val[0]));
+	    	    v[s].val[0]   = 0.5f*(((v[s].D)-> val[0])+((v[s].R)-> val[0]));
+	       }
+	    }
+    }
 }
 
 void dens_step(unsigned int n, struct float_link *x, struct float_link *x0, struct float_link *u, struct float_link *v, float diff, float dt)

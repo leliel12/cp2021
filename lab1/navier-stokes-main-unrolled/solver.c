@@ -39,40 +39,26 @@ static void set_bnd(unsigned int n, boundary b, float* x)
 static void lin_solve(unsigned int n, boundary b, float* x, const float* x0, float a, float c)
 {
     for (unsigned int k = 0; k < 20; k++) {
-	//#pragma omp parallel for default(none) shared(x,x0,n,a,c) collapse(2)
-        //for (unsigned int i = 1; i <= n; i++) {
-        //    for (unsigned int j = 1; j <= n; j++) {
-        //        x[IX(i, j)] = (x0[IX(i, j)] + a * (x[IX(i - 1, j)] + x[IX(i + 1, j)] + x[IX(i, j - 1)] + x[IX(i, j + 1)])) / c;
-        //    }
-        //}
-
-	#pragma omp parallel default(none) shared(x,x0,n,a,c)
-	{
-	     #pragma omp for nowait collapse(2)
-             for (unsigned int i = 1; i <= n; i=i+2) {
-                 for (unsigned int j = 1; j <= n; j=j+2) {
-                     x[IX(i, j)] = (x0[IX(i, j)] + a * (x[IX(i - 1, j)] + x[IX(i + 1, j)] + x[IX(i, j - 1)] + x[IX(i, j + 1)])) / c;
-                 }
-	     }
-	     #pragma omp for nowait collapse(2)
-             for (unsigned int i = 1; i <= n; i=i+2) {
-                 for (unsigned int j = 2; j <= n; j=j+2) {
-                     x[IX(i, j)] = (x0[IX(i, j)] + a * (x[IX(i - 1, j)] + x[IX(i + 1, j)] + x[IX(i, j - 1)] + x[IX(i, j + 1)])) / c;
-                 }
-             }
-	     #pragma omp for nowait collapse(2)
-             for (unsigned int i = 2; i <= n; i=i+2) {
-                 for (unsigned int j = 1; j <= n; j=j+2) {
-                     x[IX(i, j)] = (x0[IX(i, j)] + a * (x[IX(i - 1, j)] + x[IX(i + 1, j)] + x[IX(i, j - 1)] + x[IX(i, j + 1)])) / c;
-                 }
-	     }
-	     #pragma omp for nowait collapse(2)
-             for (unsigned int i = 2; i <= n; i=i+2) {
-                 for (unsigned int j = 2; j <= n; j=j+2) {
-                     x[IX(i, j)] = (x0[IX(i, j)] + a * (x[IX(i - 1, j)] + x[IX(i + 1, j)] + x[IX(i, j - 1)] + x[IX(i, j + 1)])) / c;
-                 }
-             }
+        for (unsigned int i = 1; i <= n; i=i+2) {
+            for (unsigned int j = 1; j <= n; j=j+2) {
+                x[IX(i, j)] = (x0[IX(i, j)] + a * (x[IX(i - 1, j)] + x[IX(i + 1, j)] + x[IX(i, j - 1)] + x[IX(i, j + 1)])) / c;
+            }
 	}
+        for (unsigned int i = 1; i <= n; i=i+2) {
+            for (unsigned int j = 2; j <= n; j=j+2) {
+                x[IX(i, j)] = (x0[IX(i, j)] + a * (x[IX(i - 1, j)] + x[IX(i + 1, j)] + x[IX(i, j - 1)] + x[IX(i, j + 1)])) / c;
+            }
+        }
+        for (unsigned int i = 2; i <= n; i=i+2) {
+            for (unsigned int j = 1; j <= n; j=j+2) {
+                x[IX(i, j)] = (x0[IX(i, j)] + a * (x[IX(i - 1, j)] + x[IX(i + 1, j)] + x[IX(i, j - 1)] + x[IX(i, j + 1)])) / c;
+            }
+	}
+        for (unsigned int i = 2; i <= n; i=i+2) {
+            for (unsigned int j = 2; j <= n; j=j+2) {
+                x[IX(i, j)] = (x0[IX(i, j)] + a * (x[IX(i - 1, j)] + x[IX(i + 1, j)] + x[IX(i, j - 1)] + x[IX(i, j + 1)])) / c;
+            }
+        }
         set_bnd(n, b, x);
     }
 }
